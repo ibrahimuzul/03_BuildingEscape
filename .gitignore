@@ -13,3 +13,6 @@ BuildingEscape/Content/StarterContent/
 ######################
 *.VC.db
 BuildingEscape/.vs/BuildingEscape/v15/Preview/ipch/AutoPCH/542dbc35b652794f/POSITIONREPORT.ipch
+BuildingEscape/.vs/BuildingEscape/v15/Preview/Browse.VC.opendb
+BuildingEscape/.vs/BuildingEscape/v15/Preview/Solution.VC.db-shm
+BuildingEscape/.vs/BuildingEscape/v15/Preview/Solution.VC.db-wal
