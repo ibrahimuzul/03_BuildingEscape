@@ -9,9 +9,6 @@
 
 
 
-
-
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BUILDINGESCAPE_API UOoenDoor : public UActorComponent
 {
