@@ -1,7 +1,7 @@
 // Copyright Ben Tristem 2016
 
-#include "BuildingEscape.h"
 #include "Grabber.h"
+#include "BuildingEscape.h"
 #include "DrawDebugHelpers.h"
 
 #define OUT
