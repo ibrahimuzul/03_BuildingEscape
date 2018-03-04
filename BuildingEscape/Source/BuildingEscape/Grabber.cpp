@@ -25,6 +25,14 @@ void UGrabber::BeginPlay()
 
 	UE_LOG(LogTemp, Warning, TEXT("Grabber reporting for duty!"));
 
+	FindPhysicsHandleComponent();
+
+	SetupInputComponent();
+
+	
+}
+
+void UGrabber::FindPhysicsHandleComponent() {
 	/// Look for attached Physics Handle
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
 	if (PhysicsHandle)
@@ -35,7 +43,10 @@ void UGrabber::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s missing physics handle component!"), *GetOwner()->GetName());
 	}
+}
 
+void UGrabber::SetupInputComponent()
+{
 	/// Look for attached Input Component (only appears at run time)
 	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
 	if (InputComponent)
@@ -51,8 +62,16 @@ void UGrabber::BeginPlay()
 	}
 }
 
+
+
 void UGrabber::Grab() {
 	UE_LOG(LogTemp, Warning, TEXT("Grab Pressed"));
+
+	/// Line trace and see if we reach any actors with physics body collision channel set
+	GetFirstPhysicsBodyInReach();
+
+	/// If we hit something then attach a physics handle
+	// TODO ATTACH physics handle
 }
 
 void UGrabber::Release() {
@@ -64,6 +83,14 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	// if the physics handle is attached
+		// move the object that we are holding
+
+
+}
+
+const FHitResult UGrabber::GetFirstPhysicsBodyInReach()
+{
 	// Get player view point this tick
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotator;
@@ -75,13 +102,13 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 
 	// TODO Log out to test
 	/*UE_LOG(LogTemp, Warning, TEXT("Location %s, Rotation %s"),
-		*PlayerViewPointLocation.ToString(),
-		*PlayerViewPointRotator.ToString());*/
+	*PlayerViewPointLocation.ToString(),
+	*PlayerViewPointRotator.ToString());*/
 
 	FVector LineTraceEnd = PlayerViewPointLocation + (PlayerViewPointRotator.Vector() * Reach);
 	//FVector(0.f, 0.f, 100.f);
 
-// Draw a red trace in the world to visualise
+	// Draw a red trace in the world to visualise
 	DrawDebugLine(
 		GetWorld(),
 		PlayerViewPointLocation,
@@ -115,4 +142,6 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 			*(ActorHit->GetName())
 		);
 	}
+
+	return FHitResult();
 }
