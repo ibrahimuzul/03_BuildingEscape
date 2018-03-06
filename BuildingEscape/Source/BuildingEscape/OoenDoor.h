@@ -41,9 +41,11 @@ private:
 
 	float LastDoorOpenTime;
 
-	UPROPERTY(EditAnywhere)
-		AActor* ActorThatOpens;
+	//UPROPERTY(EditAnywhere)
+	//	AActor* ActorThatOpens;
 
 	AActor* Owner; // the owning door
 
+	// Returns total mass in kg
+	float GetTotalMassOfActorsOnPlate();
 };
