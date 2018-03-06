@@ -62,6 +62,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	if (!PhysicsHandle) { return; }
 	// if the physics handle is attached
 	if (PhysicsHandle->GrabbedComponent)
 	{
@@ -81,6 +82,7 @@ void UGrabber::Grab() {
 	/// If we hit something then attach a physics handle
 	if (ActorHit)
 	{
+		if (!PhysicsHandle) { return; }
 		PhysicsHandle->GrabComponentAtLocation(  //GrabComponent or GrabComponentAtLocationWithRotation
 			ComponentToGrab,
 			NAME_None, //no bones needed
@@ -90,47 +92,48 @@ void UGrabber::Grab() {
 }
 
 void UGrabber::Release() {
-	//UE_LOG(LogTemp, Warning, TEXT("Grab Released"));
+
+	if (!PhysicsHandle) { return; }
 	PhysicsHandle->ReleaseComponent();
 }
 
-const FHitResult UGrabber::GetFirstPhysicsBodyInReach()
-{
-	// Line trace (AKA Ray-cast) out to reach distance
-	FHitResult HitResult;
-	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
-	GetWorld()->LineTraceSingleByObjectType(
-		OUT HitResult,
-		GetReachLineStart(),
-		GetReachLineEnd(),
-		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
-		TraceParameters
-	);
-	return HitResult;
-}
+	const FHitResult UGrabber::GetFirstPhysicsBodyInReach()
+	{
+		// Line trace (AKA Ray-cast) out to reach distance
+		FHitResult HitResult;
+		FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
+		GetWorld()->LineTraceSingleByObjectType(
+			OUT HitResult,
+			GetReachLineStart(),
+			GetReachLineEnd(),
+			FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+			TraceParameters
+		);
+		return HitResult;
+	}
 
-FVector UGrabber::GetReachLineStart()
-{
-	// Get player view point this tick
-	FVector PlayerViewPointLocation;
-	FRotator PlayerViewPointRotator;
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
-		OUT PlayerViewPointLocation,
-		OUT PlayerViewPointRotator
-	);
-	return PlayerViewPointLocation ;
-}
+	FVector UGrabber::GetReachLineStart()
+	{
+		// Get player view point this tick
+		FVector PlayerViewPointLocation;
+		FRotator PlayerViewPointRotator;
+		GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
+			OUT PlayerViewPointLocation,
+			OUT PlayerViewPointRotator
+		);
+		return PlayerViewPointLocation;
+	}
 
-FVector UGrabber::GetReachLineEnd()
-{
-	// Get player view point this tick
-	FVector PlayerViewPointLocation;
-	FRotator PlayerViewPointRotator;
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
-		OUT PlayerViewPointLocation,
-		OUT PlayerViewPointRotator
-	);
-	return PlayerViewPointLocation + PlayerViewPointRotator.Vector() * Reach;
-}
+	FVector UGrabber::GetReachLineEnd()
+	{
+		// Get player view point this tick
+		FVector PlayerViewPointLocation;
+		FRotator PlayerViewPointRotator;
+		GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
+			OUT PlayerViewPointLocation,
+			OUT PlayerViewPointRotator
+		);
+		return PlayerViewPointLocation + PlayerViewPointRotator.Vector() * Reach;
+	}
 
 
